@@ -26,12 +26,25 @@ export class App extends Component {
     if (
       contacts.filter(
         person => person.name.toLowerCase() === name.toLowerCase()
-      ).length > 0
+      ).length
     ) {
       return alert(`${name} is already in contacts`);
     }
     this.setState({ contacts: [...contacts, contact] });
   };
+
+  componentDidMount() {
+    const contacts = JSON.parse(localStorage.getItem('My-Contacts'));
+    if (contacts?.length) {
+      this.setState({ contacts });
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    const { contacts } = this.state;
+    if (prevState.contacts.length !== contacts.length) {
+      localStorage.setItem('My-Contacts', JSON.stringify(contacts));
+    }
+  }
 
   filter = () => {
     const { contacts, filter } = this.state;
